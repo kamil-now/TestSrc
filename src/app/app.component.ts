@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,80 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'TestSrc';
+
+  public title = 'TestSrc';
+  public showCorrectAnswers = false;
+  public data: Src;
+  private json = 'assets/src.json';
+  private initData: Src;
+
+  constructor(private http: HttpClient) {
+    this.getJSON().subscribe(data => {
+      this.initData = data;
+      this.initData.sets.forEach(set => set.numberOfQuestions = set.questions.length);
+      this.reset();
+    }, error => console.error(error));
+  }
+
+  public reset(): void {
+    this.showCorrectAnswers = false;
+    this.data = JSON.parse(JSON.stringify(this.initData));
+  }
+
+  public getJSON(): Observable<Src> {
+    return this.http.get(this.json)
+      .pipe(
+        map((res: any) => { const tmp: Src = JSON.parse(JSON.stringify(res)); return tmp; })
+      );
+
+  }
+
+  public isChecked(question: Question, selected: number): boolean {
+    return selected === question.selected;
+  }
+
+  public check(question: Question, selected: number): void {
+    question.selected = selected;
+  }
+
+  public getNumberOfCorrectAnswers(set: SrcSet): number {
+    return set.questions.filter(x => x.selected === x.correct).length;
+  }
+
+  public random(): void {
+    let setIndex = 0;
+    this.data.sets.forEach(set => {
+      const tmp = [...this.initData.sets[setIndex].questions];
+      set.questions = [];
+      let i: number;
+      let random: number;
+      for (i = 0; i < set.numberOfQuestions; i++) {
+        random = this._getRandomInt(0, tmp.length);
+        set.questions.push(tmp[random]);
+        const index = tmp.indexOf(tmp[random]);
+        tmp.splice(index, 1);
+      }
+      setIndex++;
+    });
+  }
+  private _getRandomInt(min: number, max: number): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+}
+
+export class Src {
+  sets: SrcSet[];
+}
+export class SrcSet {
+  numberOfQuestions: number;
+  title: string;
+  questions: Question[];
+}
+export class Question {
+  selected: number;
+  text: string;
+  answers: string[];
+  correct: number;
 }
