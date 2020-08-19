@@ -34,11 +34,11 @@ user-select: none;
 }
 //http://csscheckbox.com/checkboxes/u/csscheckbox_f60067e68146be412873f96f1d2458cd.png
 
-$headerHegiht: 100px;
-$footerHegiht: 100px;
+$headerHegiht: 10%;
+$footerHegiht: 10%;
 #content {
-  padding-top: $headerHegiht;
-  padding-bottom: $footerHegiht;
+  padding-top: $headerHegiht * 2;
+  padding-bottom: $footerHegiht * 2;
   background:#444; color:#fafafa;
 }
 #header {
@@ -59,7 +59,9 @@ $footerHegiht: 100px;
   background:#222; 
   color:#fafafa;
 }
-
+html {
+  font-size: 70%;
+}
 html body ul li span p h1 h2 h3 h4 h5 h6 div {
   background:#444 !important; 
   color:#fafafa !important;
@@ -68,4 +70,8 @@ html body ul li span p h1 h2 h3 h4 h5 h6 div {
 .list-group-item.std-colors {
   background:#444 !important; 
   color:#fafafa !important;
+}
+
+.list-group-item {
+  padding: 0.5rem !important;
 }

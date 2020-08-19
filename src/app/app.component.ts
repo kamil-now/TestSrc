@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { SrcJSON } from './app.constant';
 
 @Component({
   selector: 'app-root',
@@ -13,28 +11,17 @@ export class AppComponent {
   public title = 'TestSrc';
   public showCorrectAnswers = false;
   public data: Src;
-  private json = 'assets/src.json';
-  private initData: Src;
+  private readonly initData: Src;
 
-  constructor(private http: HttpClient) {
-    this.getJSON().subscribe(data => {
-      this.initData = data;
-      this.initData.sets.forEach(set => set.numberOfQuestions = set.questions.length);
-      this.reset();
-    }, error => console.error(error));
+  constructor() {
+    this.initData = JSON.parse(JSON.stringify(SrcJSON));
+    this.initData.sets.forEach(set => set.numberOfQuestions = set.questions.length);
+    this.reset();
   }
 
   public reset(): void {
     this.showCorrectAnswers = false;
     this.data = JSON.parse(JSON.stringify(this.initData));
-  }
-
-  public getJSON(): Observable<Src> {
-    return this.http.get(this.json)
-      .pipe(
-        map((res: any) => { const tmp: Src = JSON.parse(JSON.stringify(res)); return tmp; })
-      );
-
   }
 
   public isChecked(question: Question, selected: number): boolean {

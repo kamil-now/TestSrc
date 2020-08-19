@@ -1,18 +1,17 @@
 <div id="content" class="container">
   <ng-container *ngIf="data">
     <ng-container *ngFor="let set of data.sets; let s= index">
-      <div class="my-4">
+      <div class="my-1">
         <h5>{{ 'Q' + s + '. ' + set.title }}</h5>
         <ng-container *ngFor="let question of set.questions; let i= index">
-          <div class="my-4">
+          <div class="my-1">
             <ul class="list-group">
               <li class="list-group-item std-colors">
                 <h5 class="font-weight-bold">{{ question.text }}</h5>
               </li>
               <ng-container *ngFor="let answer of question.answers; let j=index">
 
-                <li class="list-group-item"
-                  [class.std-colors]="!isChecked(question, j) || !showCorrectAnswers"
+                <li class="list-group-item" [class.std-colors]="!isChecked(question, j) || !showCorrectAnswers"
                   [class.list-group-item-success]="isChecked(question, j) && showCorrectAnswers && question.correct === j"
                   [class.list-group-item-danger]="isChecked(question, j) && showCorrectAnswers && question.correct !== j">
                   <div class="d-flex flex-row pl-2">
@@ -34,14 +33,16 @@
 <div id="header">
   <div class="container d-flex flex-row align-items-center">
     <h3>TEST SRC</h3>
-    <div class="d-flex flex-row ml-4 align-items-center">
-      <button type="button" class="btn btn-primary my-1" (click)="random()">
-        RANDOM
-      </button>
+    <button type="button" class="btn btn-primary my-1 mx-2" (click)="random()">
+      RANDOM
+    </button>
+    <div class="d-flex flex-row flex-wrap ml-4 align-items-center">
       <ng-container *ngIf="data">
         <ng-container *ngFor="let set of data.sets; let s=index">
-          <input type="number" class="mx-1 form-control form-control-sm" placeholder="{{ 'ilość pyt. Q' + s }}" min="1"
-            max="set.questions.length" [value]="set.numberOfQuestions" (input)="set.numberOfQuestions = $event.target.value">
+          <h5 class="ml-2">{{ 'Q' + s + ': '}}</h5>
+          <input type="number" class="mx-1" placeholder="{{ 'ilość pyt. Q' + s }}" min="1" size="4"
+            max="set.questions.length" [value]="set.numberOfQuestions"
+            (input)="set.numberOfQuestions = $event.target.value">
         </ng-container>
       </ng-container>
     </div>
